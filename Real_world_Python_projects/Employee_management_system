@@ -1,0 +1,44 @@
+from abc import ABC, abstractmethod
+
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+
+class Employee(Person):
+    def __init__(self, name, age, role, salary):
+        super().__init__(name, age)
+        self.role = role
+        self._salary = salary
+
+    @property
+    def salary(self):
+        return self._salary
+
+    @salary.setter
+    def salary (self, value):
+        if value < 1000:
+            raise ValueError("No employee is given less than $1000 per month")
+        self._salary = value
+
+    def employee_details(self):
+        return f"{self.name}, of {self.age} years, works as a {self.role} and earns ${self._salary}"
+
+
+class Manager(Employee):
+    def employee_details(self):
+
+        return f"{self.name} of age {self.age}, is a/an {self.role} here and earns ${self.salary}"
+
+
+emp = Employee("Bwiza Annie", "20", "Developer", "3000")
+mane= Manager("Hubert", 40, "operations Manager", "4000")
+mane2= Manager("Chantal", 50, "Branch Manager", "8000")
+
+emp.salary=7000
+print(mane.salary)
+print(emp.employee_details())
+print(mane.employee_details())
+print(mane2.employee_details())

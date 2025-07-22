@@ -1,0 +1,45 @@
+# Global dictionary to track total cargo weight for each flight
+cargo_tracker = {
+    1: 0,
+    2: 0,
+    3: 0
+}
+
+# Plane mapping
+Planes = {
+    1: "AirBoeing 450",
+    2: "RwandAir",
+    3: "Qatar Airways"
+}
+
+# Ask passenger details
+Passenger_name = input("Passenger name: ")
+print("""Flight numbers available today are:
+         1. AirBoeing 450
+         2. RwandAir
+         3. Qatar Airways """)
+Flight_number = int(input("Choose 1, 2, or 3: "))
+Cargo_weight = int(input("Enter your luggage weight in kg: "))
+
+class Air_Ticket:
+    def __init__(self, passenger_name, cargo_weight):
+        self.passenger_name = passenger_name
+        self.cargo_weight = cargo_weight
+
+class Book_ticket(Air_Ticket):
+    def __init__(self, passenger_name, cargo_weight, flight_number):
+        super().__init__(passenger_name, cargo_weight)
+        self.flight_number = flight_number
+
+    def book(self):
+        global cargo_tracker
+        if cargo_tracker[self.flight_number] + self.cargo_weight <= 350:
+            cargo_tracker[self.flight_number] += self.cargo_weight
+            print(f"{self.passenger_name}, you have successfully booked {Planes[self.flight_number]}")
+            print(f"Current cargo load for {Planes[self.flight_number]}: {cargo_tracker[self.flight_number]} kg")
+        else:
+            print(f"Sorry {self.passenger_name}, {Planes[self.flight_number]} has reached its 350kg cargo limit.")
+
+# Book the passenger
+passenger_1 = Book_ticket(Passenger_name, Cargo_weight, Flight_number)
+passenger_1.book()

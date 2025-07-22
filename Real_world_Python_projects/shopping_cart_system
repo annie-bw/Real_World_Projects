@@ -1,0 +1,44 @@
+from abc import ABC, abstractmethod
+
+
+class Product:
+    def __init__(self,name, price, quantity):
+        self.name= name
+        self.price = price
+        self.quantity= quantity
+
+class Cart:
+    def __init__(self):
+        self.items= []
+    def _add_product(self,product):
+        self.items.append(product)
+    def __str__(self):
+        return "\n".join([f"{item.name} $({item.price})" for item in self.items])
+    def __len__(self):
+        return len(self.items)
+    def get_total(self):
+        return sum(product.price * product.quantity for product in self.items)
+
+    def discount(self):
+        total = self.get_total()
+        if total < 2000:
+            raise ValueError ("Discount is applied to products that cost 2000+")
+        discount= 0.2 * total
+        discounted_price = int(total) - discount
+        return f"Discount Applied, you  will pay ${discounted_price} now. Thank you for shopping with us!!!"
+
+
+cart= Cart()
+cart._add_product(Product("laptop", 3000, 2))
+cart._add_product(Product("vase", 700, 1))
+cart._add_product(Product("sweaters", 100, 4))
+cart._add_product(Product("electric cooker", 1000, 1))
+
+print(cart.__str__())
+print(cart.__len__())
+print(cart.get_total())
+print(cart.discount())
+
+
+
+

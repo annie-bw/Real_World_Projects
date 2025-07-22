@@ -1,0 +1,17 @@
+class Hammer:
+    def usage(self):
+        return "Hammer hammers nails"
+class Drill:
+    def usage(self):
+        return "Drill drills holes in wood, wall or metal"
+class Saw:
+    def usage(self):
+        return "Saw cuts wood into smaller parts"
+def tool_rent(tool):
+    return tool.usage()
+
+print(tool_rent(Hammer()))
+print(tool_rent(Drill()))
+print(tool_rent(Saw()))
+
+

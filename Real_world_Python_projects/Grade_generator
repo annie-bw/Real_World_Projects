@@ -1,0 +1,148 @@
+from abc import ABC,abstractmethod
+class Grades:
+    def __init__(self, assignment_name, category, assignment_weight, grade_obtained):
+        self.assignment_name = assignment_name
+        self.category = category.lower()
+        self.assignment_weight = float(assignment_weight)
+        self.grade_obtained = float(grade_obtained)
+
+    @property
+    def assignment_weight(self):
+        return self._assignment_weight
+
+    @assignment_weight.setter
+    def assignment_weight(self, value):
+        if value <= 100:
+            self._assignment_weight = value
+        else:
+            raise ValueError("Assignment weight must be less than or equal to 100%.")
+
+    @property
+    def grade_obtained(self):
+        return self._grade_obtained
+
+    @grade_obtained.setter
+    def grade_obtained(self, value):
+        if value <= 100:
+            self._grade_obtained = value
+        else:
+            raise ValueError("Grade must be less than or equal to 100%.")
+
+    def weighted_grade(self):
+        return (self.assignment_weight * self.grade_obtained) / 100
+
+
+# MAIN PROGRAM
+print(".................Welcome to Get Your GPA.............")
+assignments = []
+formative_weight_total=0
+summative_weight_total=0
+while True:
+    #input assignment name
+    while True:
+        assignment_name = input("Assignment name: ")
+        if assignment_name == "":
+            print("assignment name cannot be empty. Enter a valid name")
+        else:
+            break
+     #get category
+    while True:
+        category = input("Category (Formative or Summative): ").strip().lower()
+        if category not in ["formative", "summative"]:
+            print("Invalid category. Please enter 'Formative' or 'Summative'.")
+            continue
+        else:
+            break
+    while True:
+        try:
+            assignment_weight = float(input("Weight of the assignment (as % of total grade): "))
+            grade_obtained = float(input("Grade obtained (out of 100%): "))
+        except ValueError:
+            print("Invalid input. Please enter numeric values.")
+            continue
+
+        if category == "formative":
+            if formative_weight_total + assignment_weight > 60:
+                print("Total formative assignment weight cannot exceed 60%.")
+                continue
+            formative_weight_total += assignment_weight
+        elif category == "summative":
+            if summative_weight_total + assignment_weight > 40:
+                print("Total summative assignment weight cannot exceed 40%.")
+                continue
+            summative_weight_total += assignment_weight
+        elif formative_weight_total + summative_weight_total != 100:
+            print("formative weight and summative weight have to total to 100%")
+        g = Grades(assignment_name, category, assignment_weight, grade_obtained)
+        assignments.append(g)
+        try:
+            more_assignments = input("Do you want to enter more assignments? (Yes/No): ").strip().lower()
+            if more_assignments == "yes":
+                continue
+            elif more_assignments == "no":
+                break
+        except:
+                raise TypeError("Invalid input")
+
+#Formatives
+formative_grades = []
+formative_total=0
+formative_count=0
+formative_average=0
+for assignment in assignments:
+    if assignment.category == "formative":
+        formative_grades.append(assignment.weighted_grade())
+        formative_total += assignment.weighted_grade()
+        formative_count += 1
+print("\n=============Formatives Report=============")
+if formative_count > 0:
+    formative_average = formative_total / len(formative_grades)
+    print(f"Your Total of Formative Assessments: {formative_total:.2f}/60")
+
+    #results
+    if formative_average >= 30:
+            print("well done, You passed the formatives")
+    else:
+            print("You failed the formatives, You will repeat this course")
+else:
+    raise ZeroDivisionError("you need to input formative grades too")
+
+#summatives
+summative_grades = []
+summative_total=0
+summative_count=0
+summative_average=0
+for assignment in assignments:
+
+    if assignment.category == "summative":
+        summative_grades.append(assignment.weighted_grade())
+        summative_total += assignment.weighted_grade()
+        summative_count +=1
+print("\n=============Summative Report =============")
+if summative_count > 0:
+    summative_average = summative_total / len(summative_grades)
+    print(f"Your total of summative Assessments: {summative_total:.2f}/40")
+    #results
+    if summative_average >= 20:
+        print("well done, You passed the summatives")
+    else:
+            print("You failed the summative assignments, you will repeat this course")
+else:
+    raise ZeroDivisionError("you need to input summative grades too")
+
+#Weighted grade calculation
+total_marks=summative_total + formative_total
+total_weighted_gpa=(total_marks/100)*5
+print("\n =============Your Final GPA=============")
+print(f"GPA: {total_weighted_gpa:.3f}/5")
+
+# Final Result
+if formative_count > 0 and summative_count > 0:
+    if formative_average >= 30 and summative_average >= 20:
+        print("Congratulations! You passed the course.")
+    else:
+        print("You did not meet the pass mark, you will repeat")
+else:
+    print("\n Cannot evaluate final result: missing formative or summative grades.")
+
+
